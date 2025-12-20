@@ -1,0 +1,21 @@
+from flask import Flask
+from injector import Module, Binder, singleton
+
+from src.adapters.sql.db_instance import DBInstance
+from src.adapters.sql.sql_user_repository import SQLUserRepository
+from src.application.api.security.flask_authentication_repository import FlaskAuthenticationRepository
+from src.services.user_service import UserService
+
+
+class DependencyInjector(Module):
+    def __init__(self, app: Flask, db_instance: DBInstance):
+        self.app = app
+        self.db_instance = db_instance
+
+    def configure(self, binder: Binder):
+        user_repository = SQLUserRepository(self.db_instance)
+
+        authentication_repository = FlaskAuthenticationRepository(user_repository)
+        user_service = UserService(user_repository, authentication_repository)
+
+        binder.bind(UserService, to=user_service, scope=singleton)

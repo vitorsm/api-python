@@ -1,0 +1,10 @@
+from enum import Enum
+
+
+class ErrorCode(Enum):
+
+    CREDENTIALS_ERROR = "ERR1001"
+    VALIDATION_ERROR = "ERR1002"
+    PERMISSION_ERROR = "ERR1003"
+    ENTITY_NOT_FOUND = "ERR1004"
+    DUPLICATE_ENTITY = "ERR1005"
