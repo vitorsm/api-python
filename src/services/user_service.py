@@ -43,7 +43,7 @@ class UserService(GenericService[User]):
         if current_user.login != user.login:
             raise InvalidEntityException("User", ["login"])
 
-    def check_read_permission(self, entity: Entity, current_user: User):
+    def check_read_permission(self, entity: User, current_user: User):
         pass
 
     def authenticate(self, login: str, password: str) -> User:

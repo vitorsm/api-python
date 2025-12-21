@@ -1,65 +1,33 @@
+
 from src.adapters.sql.sql_user_repository import SQLUserRepository
+from src.entities.user import User
+from src.services.ports.generic_repository import GenericRepository
 from tests.integration_tests.adapters.base_sql_alchemy_test import BaseSQLAlchemyTest
-from tests.mocks import user_mock, FIRST_DEFAULT_ID, SECOND_DEFAULT_ID
+from tests.integration_tests.adapters.sql.generic_repository_test import GenericRepositoryTest
+from tests.mocks import user_mock
 
 
-class TestSQLUserRepository(BaseSQLAlchemyTest):
-
+class TestSQLUserRepository(BaseSQLAlchemyTest, GenericRepositoryTest):
     def setUp(self):
         super().setUp()
         self.repository = SQLUserRepository(self.db_instance)
 
-    def test_create_user(self):
-        # given
-        user = user_mock.get_valid_user()
+    def get_valid_entity(self) -> User:
+        return user_mock.get_valid_user()
 
-        # when
-        self.repository.create(user)
+    def get_default_entity(self) -> User:
+        return user_mock.get_default_user()
 
-        # then
-        persisted_user = self.repository.find_by_id(user.id)
-        self.assertEqual(user.login, persisted_user.login)
-        self.assertEqual(user.name, persisted_user.name)
-        self.assertEqual(user.password, persisted_user.password)
-
-    def test_update_user(self):
-        # given
-        user = user_mock.get_default_user()
+    def get_updated_entity(self) -> User:
+        user = self.get_default_entity()
         user.name = "new name"
-        user.login = "new login"
-        user.password = "new password"
+        user.password = "12345"
+        return user
 
-        # when
-        self.repository.update(user)
+    def get_repository(self) -> GenericRepository:
+        return self.repository
 
-        # then
-        persisted_user = self.repository.find_by_id(user.id)
-        self.assertEqual(persisted_user.name, user.name)
-        self.assertEqual(persisted_user.login, user.login)
-        self.assertEqual(persisted_user.password, user.password)
-
-    def test_find_by_id(self):
-        # given
-        user_id = FIRST_DEFAULT_ID
-
-        # when
-        user = self.repository.find_by_id(user_id)
-
-        # then
-        self.assertIsNotNone(user)
-        self.assertEqual(user_id, user.id)
-        self.assertEqual("User 1", user.name)
-        self.assertEqual("user1", user.login)
-
-    def test_delete_user(self):
-        # given
-        user_id = SECOND_DEFAULT_ID
-        user = user_mock.get_default_user()
-        user.id = user_id
-
-        # when
-        self.repository.delete(user)
-
-        # then
-        persisted_user = self.repository.find_by_id(user_id)
-        self.assertIsNone(persisted_user)
+    def compare_entities(self, entity1: User, entity2: User):
+        self.assertEqual(entity1.name, entity2.name)
+        self.assertEqual(entity1.login, entity2.login)
+        self.assertEqual(entity1.id, entity2.id)
