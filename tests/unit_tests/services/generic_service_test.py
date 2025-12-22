@@ -14,6 +14,7 @@ class GenericServiceTest(metaclass=abc.ABCMeta):
         self.default_user = user_mock.get_default_user()
         self.get_authentication_repository().get_current_user.return_value = self.default_user
         self.user_without_permission = user_mock.get_valid_user()
+        self.get_repository().find_by_id.return_value = self.get_default_entity()
 
     @abc.abstractmethod
     def get_default_entity(self) -> Any:
@@ -122,6 +123,7 @@ class GenericServiceTest(metaclass=abc.ABCMeta):
         # given
         entity = self.get_default_entity()
         original_updated_at = entity.updated_at
+
 
         # when
         self.get_service().delete(entity)

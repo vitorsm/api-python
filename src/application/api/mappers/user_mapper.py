@@ -1,6 +1,4 @@
-from datetime import datetime
 from typing import Optional
-from uuid import uuid4
 
 from src.application.api.mappers.generic_mapper import GenericMapper
 from src.entities.user import User

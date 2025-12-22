@@ -2,6 +2,7 @@ import abc
 from typing import TypeVar, Generic, Optional, Type, get_args
 from uuid import UUID
 
+from sqlalchemy import and_
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
@@ -53,6 +54,17 @@ class SQLRepository(Generic[Entity, DBModel], metaclass=abc.ABCMeta):
             return None
 
         return entity_db.to_entity()
+
+    def find_all(self, workspace_id: UUID) -> list[Entity]:
+        session = self.get_session()
+        entity_type = self.__get_db_model_type()
+        db_type = self.__get_db_model_type()
+
+        entities_db = (session.query(db_type).filter(and_(entity_type.workspace_id == workspace_id,
+                                                                            entity_type.deleted_at == None))
+                       .order_by(db_type.name).all())
+
+        return [entity_db.to_entity() for entity_db in entities_db]
 
     def __get_entity_type(self) -> Type[Entity]:
         return get_args(self.__orig_bases__[0])[0]

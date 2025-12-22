@@ -301,7 +301,7 @@ class GenericControllerTest(metaclass=abc.ABCMeta):
 
         # then
         self.assertEqual(403, response.status_code, response.text)
-        self.assertIn(entity_id, response.json["details"])
+        self.assertIn(str(SECOND_DEFAULT_ID), response.json["details"])
 
     def test_get_entity_without_token(self):
         # given

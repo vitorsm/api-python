@@ -1,0 +1,27 @@
+from sqlalchemy import Column, UUID, ForeignKey
+from sqlalchemy.orm import relationship
+
+from src.adapters.sql.models import Base
+from src.adapters.sql.models.generic_entity_db import GenericEntityDB
+from src.entities.task_type import TaskType
+
+
+class TaskTypeDB(GenericEntityDB, Base[TaskType]):
+    parent_type_id = Column(UUID, ForeignKey("task_type.id"), nullable=True)
+
+    parent_type_db = relationship("TaskTypeDB", lazy="select",
+                                 primaryjoin="TaskTypeDB.parent_type_id == TaskTypeDB.id")
+
+    def __init__(self, task_type: TaskType):
+        super().__init__(task_type)
+        self.update_attributes(task_type)
+
+    def to_entity(self) -> TaskType:
+        task_type = object.__new__(TaskType)
+        task_type.parent_type = self.parent_type_db.to_entity()
+        self.fill_entity(task_type)
+        return task_type
+
+    def update_attributes(self, task_type: TaskType):
+        super().update_attributes(task_type)
+        self.parent_type_id = task_type.parent_type.id if task_type.parent_type else None

@@ -5,7 +5,7 @@ from src.entities.exceptions.authentication_exception import AuthenticationExcep
 from src.entities.exceptions.invalid_entity_exception import InvalidEntityException
 from src.entities.exceptions.permission_exception import PermissionException
 from src.entities.user import User
-from src.services.generic_service import GenericService, Entity
+from src.services.generic_service import GenericService
 from src.services.ports.authentication_repository import AuthenticationRepository
 from src.services.ports.user_repository import UserRepository
 from src.utils import encryption_utils
