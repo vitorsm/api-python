@@ -61,11 +61,11 @@ class GenericService(Generic[Entity], metaclass=abc.ABCMeta):
         entity = self.get_repository().find_by_id(entity_id)
 
         if not entity:
-            raise EntityNotFoundException(self.__get_entity_type_name(), str(entity_id))
+            raise EntityNotFoundException(self._get_entity_type_name(), str(entity_id))
 
         self.check_read_permission(entity, self.get_authentication_repository().get_current_user())
 
         return entity
 
-    def __get_entity_type_name(self) -> str:
+    def _get_entity_type_name(self) -> str:
         return get_args(self.__orig_bases__[0])[0].__name__

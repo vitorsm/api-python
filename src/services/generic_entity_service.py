@@ -1,5 +1,5 @@
 import abc
-from typing import TypeVar, Generic
+from typing import TypeVar
 
 from src.entities.exceptions.invalid_entity_exception import InvalidEntityException
 from src.entities.exceptions.permission_exception import PermissionException
@@ -32,11 +32,11 @@ class GenericEntityService(GenericService[Entity], metaclass=abc.ABCMeta):
             raise PermissionException(current_user)
 
         if not is_create:
-            old_entity = self.get_repository().find_by_id(entity.id)
+            old_entity = self.find_by_id(entity.id)
             entity.update_original_fields(old_entity)
 
             if entity.workspace != old_entity.workspace:
-                raise InvalidEntityException(self.__get_entity_type_name(), ["workspace"])
+                raise InvalidEntityException(self._get_entity_type_name(), ["workspace"])
 
         entity.update_audit_fields(current_user, is_create=is_create)
 

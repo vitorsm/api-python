@@ -4,9 +4,6 @@ from tests.integration_tests.application.api.base_api_test import BaseAPITest
 
 class TestAuthenticationController(BaseAPITest):
 
-    def setup(self):
-        super().setUp()
-
     def test_authenticate(self):
         # given
         address = "/api/authenticate"

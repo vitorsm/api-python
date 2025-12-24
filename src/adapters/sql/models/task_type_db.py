@@ -7,6 +7,7 @@ from src.entities.task_type import TaskType
 
 
 class TaskTypeDB(GenericEntityDB, Base[TaskType]):
+    __tablename__ = "task_type"
     parent_type_id = Column(UUID, ForeignKey("task_type.id"), nullable=True)
 
     parent_type_db = relationship("TaskTypeDB", lazy="select",
@@ -19,6 +20,7 @@ class TaskTypeDB(GenericEntityDB, Base[TaskType]):
     def to_entity(self) -> TaskType:
         task_type = object.__new__(TaskType)
         task_type.parent_type = self.parent_type_db.to_entity()
+
         self.fill_entity(task_type)
         return task_type
 

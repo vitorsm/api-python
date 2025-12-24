@@ -131,7 +131,7 @@ class GenericServiceTest(metaclass=abc.ABCMeta):
         # then
         self.get_repository().update.assert_called_with(entity)
 
-        self.assertNotEqual(original_updated_at, entity.updated_at)
+        self.assertNotEqual(    original_updated_at, entity.updated_at)
         self.assertIsNotNone(entity.deleted_at)
 
     def test_hard_delete_entity(self):

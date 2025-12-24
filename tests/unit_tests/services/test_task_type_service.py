@@ -7,10 +7,10 @@ from src.services.ports.task_type_repository import TaskTypeRepository
 from src.services.ports.workspace_repository import WorkspaceRepository
 from src.services.task_type_service import TaskTypeService
 from tests.mocks import task_type_mock
-from tests.unit_tests.services.generic_service_test import GenericServiceTest
+from tests.unit_tests.services.generic_entity_service_test import GenericEntityServiceTest
 
 
-class TestTaskTypeService(GenericServiceTest, TestCase):
+class TestTaskTypeService(GenericEntityServiceTest, TestCase):
 
     def setUp(self):
         self.authentication_repository = Mock(spec=AuthenticationRepository)
@@ -21,6 +21,9 @@ class TestTaskTypeService(GenericServiceTest, TestCase):
                                        self.workspace_repository)
 
         super().setUp()
+
+    def get_workspace_repository(self) -> Mock:
+        return self.workspace_repository
 
     def get_default_entity(self) -> TaskType:
         return task_type_mock.get_default_task_type()
