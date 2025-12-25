@@ -26,12 +26,15 @@ class GenericControllerTest(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_address(self, entity_id: str = None) -> str:
+    def compare_entities(self, entity1: dict, entity2: dict, compare_id: bool = False):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def compare_entities(self, entity1: dict, entity2: dict, compare_id: bool = False):
+    def get_api_name(self) -> str:
         raise NotImplementedError
+
+    def get_address(self, entity_id: str = None) -> str:
+        return f"/api/{self.get_api_name()}/{entity_id}" if entity_id else f"/api/{self.get_api_name()}"
 
     def test_create_entity(self):
         # given

@@ -4,4 +4,4 @@ from src.services.ports.generic_repository import GenericRepository
 
 
 class SQLGenericRepository(SQLRepository, metaclass=abc.ABCMeta):
-
+    pass

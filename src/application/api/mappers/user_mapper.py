@@ -1,6 +1,6 @@
 from typing import Optional
 
-from src.application.api.mappers.generic_mapper import GenericMapper
+from src.application.api.mappers.generic_mapper import GenericMapper, register_new_mapper
 from src.entities.user import User
 
 
@@ -12,3 +12,6 @@ class UserMapper(GenericMapper[User]):
         if dto:
             dto["password"] = None
         return dto
+
+
+register_new_mapper(UserMapper)

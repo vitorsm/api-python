@@ -24,6 +24,11 @@ TO_DTO_CONVERTERS = {
 }
 
 
+def register_new_mapper(mapper: Type['GenericMapper']):
+    TO_ENTITY_CONVERTERS[mapper._get_entity_type()] = lambda dto: mapper.to_entity(dto)
+    TO_DTO_CONVERTERS[mapper._get_entity_type()] = lambda entity: mapper.to_dto(entity)
+
+
 class GenericMapper(Generic[Entity]):
 
     @classmethod
@@ -32,7 +37,7 @@ class GenericMapper(Generic[Entity]):
 
     @classmethod
     def to_entity(cls, dto: dict) -> Optional[Entity]:
-        entity_type = cls.__get_entity_type()
+        entity_type = cls._get_entity_type()
         result = cls.__to_entity(dto, entity_type)
 
         if result:
@@ -41,7 +46,10 @@ class GenericMapper(Generic[Entity]):
         return result
 
     @classmethod
-    def to_dto(cls, entity: Entity) -> Optional[dict]:
+    def to_dto(cls, entity: Entity) -> Union[Optional[dict], List[dict]]:
+        if isinstance(entity, (list, set, tuple)):
+            return [cls.to_dto(single_entity) for single_entity in entity]
+
         if not entity:
             return None
 
@@ -163,12 +171,12 @@ class GenericMapper(Generic[Entity]):
 
     @classmethod
     def __get_entity_class_attributes(cls) -> List[Field]:
-        return GenericMapper.__get_class_attributes(cls.__get_entity_type())
+        return GenericMapper.__get_class_attributes(cls._get_entity_type())
 
     @staticmethod
     def __get_class_attributes(class_type: Type) -> List[Field]:
         return fields(class_type)
 
     @classmethod
-    def __get_entity_type(cls) -> Type:
+    def _get_entity_type(cls) -> Type:
         return get_args(cls.__orig_bases__[0])[0]

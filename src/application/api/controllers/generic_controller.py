@@ -28,8 +28,17 @@ class GenericController(Generic[EntityService, EntityMapper], metaclass=abc.ABCM
     def create_endpoints(self):
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def get_controller_name(self) -> str:
+        """This name will be used on the endpoint path. Prefer to use plural"""
+        raise NotImplementedError
+
     def has_create_endpoint(self) -> bool:
         return True
+
+    def instantiate_controller(self) -> Blueprint:
+        controller_name = self.get_controller_name()
+        return Blueprint(f"{controller_name}_controller", __name__, url_prefix=f"/api/{controller_name}")
 
     def start_controller(self):
         self.__register_endpoints()
@@ -41,13 +50,13 @@ class GenericController(Generic[EntityService, EntityMapper], metaclass=abc.ABCM
             @jwt_required()
             def create_entity():
                 entity_dto = request.get_json()
-                mapper = self.__get_mapper_type()
+                mapper = self._get_mapper_type()
                 entity = mapper.to_entity(entity_dto)
 
                 if not entity:
                     raise InvalidEntityException("", ["invalid entity"])
 
-                entity_service = self.__get_entity_service()
+                entity_service = self._get_entity_service()
                 entity_service.create(entity)
 
                 return jsonify(mapper.to_dto(entity)), 201
@@ -60,13 +69,13 @@ class GenericController(Generic[EntityService, EntityMapper], metaclass=abc.ABCM
             if entity_id != entity_dto.get("id"):
                 raise InvalidEntityException("UUID", ["id"])
 
-            mapper = self.__get_mapper_type()
+            mapper = self._get_mapper_type()
             entity = mapper.to_entity(entity_dto)
 
             if not entity:
                 raise InvalidEntityException("", ["invalid entity"])
 
-            entity_service = self.__get_entity_service()
+            entity_service = self._get_entity_service()
             entity_service.update(entity)
 
             return jsonify(mapper.to_dto(entity))
@@ -79,12 +88,12 @@ class GenericController(Generic[EntityService, EntityMapper], metaclass=abc.ABCM
             if not uuid_entity_id:
                 raise InvalidEntityException("UUID", ["uuid"])
 
-            entity_service = self.__get_entity_service()
-            project = entity_service.find_by_id(uuid_entity_id)
+            entity_service = self._get_entity_service()
+            entity = entity_service.find_by_id(uuid_entity_id)
 
-            mapper = self.__get_mapper_type()
+            mapper = self._get_mapper_type()
 
-            return jsonify(mapper.to_dto(project))
+            return jsonify(mapper.to_dto(entity))
 
         @self.get_controller().route("<string:entity_id>", methods=["DELETE"])
         @jwt_required()
@@ -94,7 +103,7 @@ class GenericController(Generic[EntityService, EntityMapper], metaclass=abc.ABCM
             if not uuid_entity_id:
                 raise InvalidEntityException("UUID", ["uuid"])
 
-            entity_service = self.__get_entity_service()
+            entity_service = self._get_entity_service()
             # todo - change it to delete by id
             entity = entity_service.find_by_id(uuid_entity_id)
 
@@ -102,13 +111,13 @@ class GenericController(Generic[EntityService, EntityMapper], metaclass=abc.ABCM
 
             return '', 204
 
-    def __get_entity_service(self) -> GenericService:
+    def _get_entity_service(self) -> GenericService:
         entity_service_type = self.__get_service_type()
         return self.get_app_injector().get(entity_service_type)
 
     def __get_service_type(self) -> Type[EntityService]:
         return get_args(self.__orig_bases__[0])[0]
 
-    def __get_mapper_type(self) -> Type[EntityMapper]:
+    def _get_mapper_type(self) -> Type[EntityMapper]:
         return get_args(self.__orig_bases__[0])[1]
 

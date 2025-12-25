@@ -1,12 +1,12 @@
 from flask import Blueprint
 from injector import Injector
 
-from src.application.api.controllers.generic_controller import GenericController
-from src.application.api.mappers.workspace_mapper import WorkspaceMapper
-from src.services.workspace_service import WorkspaceService
+from src.application.api.controllers.generic_entity_controller import GenericEntityController
+from src.application.api.mappers.task_type_mapper import TaskTypeMapper
+from src.services.task_type_service import TaskTypeService
 
 
-class WorkspaceController(GenericController[WorkspaceService, WorkspaceMapper]):
+class TaskTypeController(GenericEntityController[TaskTypeService, TaskTypeMapper]):
 
     def __init__(self, app_injector: Injector):
         self.app_injector = app_injector
@@ -19,8 +19,8 @@ class WorkspaceController(GenericController[WorkspaceService, WorkspaceMapper]):
     def get_controller(self) -> Blueprint:
         return self.controller
 
-    def create_endpoints(self):
+    def create_custom_endpoints(self):
         pass
 
     def get_controller_name(self) -> str:
-        return "workspaces"
+        return "task-types"

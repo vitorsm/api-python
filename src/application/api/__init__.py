@@ -23,7 +23,8 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_recycle": 300,     # refresh connections every 30 min
 }
 
-CORS(app)
+if config.ADD_ALLOW_CORS:
+    CORS(app)
 
 db_instance = FlaskAlchemyDBInstance(app)
 app_injector = Injector([DependencyInjector(app, db_instance)])

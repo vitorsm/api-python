@@ -1,14 +1,16 @@
 import abc
-from typing import TypeVar
+from typing import TypeVar, List
+from uuid import UUID
 
+from src.entities.exceptions.entity_not_found_exception import EntityNotFoundException
 from src.entities.exceptions.invalid_entity_exception import InvalidEntityException
 from src.entities.exceptions.permission_exception import PermissionException
 from src.entities.generic_entity import GenericEntity
 from src.entities.user import User
 from src.entities.workspace import Workspace
 from src.services.generic_service import GenericService
-from src.services.ports.workspace_repository import WorkspaceRepository
-
+from src.services.ports.generic_entity_repository import GenericEntityRepository
+from src.services.workspace_service import WorkspaceService
 
 Entity = TypeVar('Entity', bound=GenericEntity)
 
@@ -16,16 +18,33 @@ Entity = TypeVar('Entity', bound=GenericEntity)
 class GenericEntityService(GenericService[Entity], metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
-    def get_workspace_repository(self) -> WorkspaceRepository:
+    def get_workspace_service(self) -> WorkspaceService:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_repository(self) -> GenericEntityRepository:
         raise NotImplementedError
 
     @abc.abstractmethod
     def pre_persist_custom(self, entity: Entity, is_create: bool):
         raise NotImplementedError
 
+    def find_all(self, workspace_id: UUID) -> List[Entity]:
+        workspace = self.get_workspace_service().find_by_id(workspace_id)
+        entities = self.get_repository().find_all(workspace.id)
+        current_user = self.get_authentication_repository().get_current_user()
+        for entity in entities:
+            self.check_read_permission(entity, current_user)
+        return entities
+
     def pre_persist(self, entity: Entity, is_create: bool):
         current_user = self.get_authentication_repository().get_current_user()
-        workspace: Workspace = self.get_workspace_repository().find_by_id(entity.workspace.id)
+
+        try:
+            workspace: Workspace = self.get_workspace_service().find_by_id(entity.workspace.id)
+        except EntityNotFoundException:
+            raise InvalidEntityException(self._get_entity_type_name(), ["workspace"])
+
         entity.workspace = workspace
 
         if not workspace.user_has_permission(current_user):

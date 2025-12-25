@@ -1,5 +1,8 @@
 # api-python
-Python API template
+Python API template.
+
+This project is a template with boilerplate to Python APIs.
+
 
 ## Setup
 
@@ -50,3 +53,6 @@ If you prefer, generate the html page for more details:
 ```
 coverage html
 ```
+
+## Deploy
+Use the script resources/scripts/generate-version.sh to publish the docker image in docker hub.

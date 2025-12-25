@@ -38,15 +38,15 @@ class TestUserController(BaseAPITest, GenericControllerTest):
 
         return [dto1, dto2]
 
-    def get_address(self, entity_id: str = None) -> str:
-        return f"/api/users/{entity_id}" if entity_id else "/api/users"
-
     def compare_entities(self, user1: dict, user2: dict, compare_id: bool = False):
         if compare_id:
             self.assertEqual(user1["id"], user2["id"])
 
         self.assertEqual(user1["name"], user2["name"])
         self.assertEqual(user1["login"], user2["login"])
+
+    def get_api_name(self) -> str:
+        return "users"
 
     def test_create_duplicate_user(self):
         # given

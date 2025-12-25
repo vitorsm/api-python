@@ -11,3 +11,6 @@ DB_PORT = int(os.getenv("DB_PORT", "5432"))
 DB_CONNECTION_STR = f"postgresql+psycopg2://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 FILE_REPOSITORY = os.getenv("FILE_REPOSITORY", ".files")
+
+# if you will allow cors outside (nginx for example) it should be false to avoid duplicate headers
+ADD_ALLOW_CORS = os.getenv("ADD_ALLOW_CORS", "false") == "true"

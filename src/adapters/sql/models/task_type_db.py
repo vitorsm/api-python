@@ -10,8 +10,7 @@ class TaskTypeDB(GenericEntityDB, Base[TaskType]):
     __tablename__ = "task_type"
     parent_type_id = Column(UUID, ForeignKey("task_type.id"), nullable=True)
 
-    parent_type_db = relationship("TaskTypeDB", lazy="select",
-                                 primaryjoin="TaskTypeDB.parent_type_id == TaskTypeDB.id")
+    parent_type_db = relationship("TaskTypeDB", foreign_keys=[parent_type_id], remote_side="TaskTypeDB.id")
 
     def __init__(self, task_type: TaskType):
         super().__init__(task_type)
@@ -19,7 +18,7 @@ class TaskTypeDB(GenericEntityDB, Base[TaskType]):
 
     def to_entity(self) -> TaskType:
         task_type = object.__new__(TaskType)
-        task_type.parent_type = self.parent_type_db.to_entity()
+        task_type.parent_type = self.parent_type_db.to_entity() if self.parent_type_db else None
 
         self.fill_entity(task_type)
         return task_type

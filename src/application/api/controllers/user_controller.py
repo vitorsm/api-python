@@ -11,7 +11,7 @@ class UserController(GenericController[UserService, UserMapper]):
 
     def __init__(self, app_injector: Injector):
         self.app_injector = app_injector
-        self.controller = Blueprint("user_controller", __name__, url_prefix="/api/users")
+        self.controller = self.instantiate_controller()
         self.start_controller()
 
     def get_app_injector(self) -> Injector:
@@ -19,6 +19,9 @@ class UserController(GenericController[UserService, UserMapper]):
 
     def get_controller(self) -> Blueprint:
         return self.controller
+
+    def get_controller_name(self) -> str:
+        return "users"
 
     def has_create_endpoint(self) -> bool:
         return False

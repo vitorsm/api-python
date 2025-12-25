@@ -8,6 +8,7 @@ from tests.mocks import workspace_mock, FIRST_DEFAULT_ID, SECOND_DEFAULT_ID
 
 
 class TestWorkspaceController(BaseAPITest, GenericControllerTest):
+
     def get_valid_entity(self) -> dict:
         return WorkspaceMapper.to_dto(workspace_mock.get_valid_workspace())
 
@@ -29,8 +30,8 @@ class TestWorkspaceController(BaseAPITest, GenericControllerTest):
 
         return [dto1, dto2]
 
-    def get_address(self, entity_id: str = None) -> str:
-        return f"/api/workspaces/{entity_id}" if entity_id else "/api/workspaces"
+    def get_api_name(self) -> str:
+        return "workspaces"
 
     def compare_entities(self, entity1: dict, entity2: dict, compare_id: bool = False):
         self.assertEqual(entity1["name"], entity2["name"])
