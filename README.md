@@ -1,7 +1,7 @@
 # api-python
 Python API template.
 
-This project is a template with boilerplate to Python APIs.
+This project is a template with boilerplate to Python APIs using Flask, SQLAlchemy and Injector.
 
 
 ## Setup
