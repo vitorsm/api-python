@@ -45,6 +45,7 @@ CREATE TABLE task_type (
     updated_by UUID NOT NULL,
     workspace_id UUID NOT NULL,
     parent_type_id UUID NULL,
+    description TEXT NULL,
 
     PRIMARY KEY (id),
     FOREIGN KEY (created_by) REFERENCES "user"(id),

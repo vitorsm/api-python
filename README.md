@@ -60,3 +60,20 @@ Use the script resources/scripts/generate-version.sh to publish the docker image
 ## OpenID integrations
 
 To add a new OpenID integration add one more item to HTTPOpenIdRepository.CLIENTS
+
+## DB Migrations
+
+This project uses Alembic as the migration manager. If you are creating a new database, execute this command to create the required tables:
+```
+alembic upgrade head 
+```
+
+After changing the models, execute this command to generate the migration:
+```
+alembic revision --autogenerate -m "{ADD_COMMENT_HERE}"
+```
+
+It will create the migration file. Now you only need to apply the it:
+```
+alembic upgrade head
+```

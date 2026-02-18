@@ -17,7 +17,8 @@ def get_valid_task_type(tid: UUID = None, name: str = None, workspace=workspace_
         name = f"Task type {int(random.random() * 1000)}"
 
     return TaskType(id=id, name=name, workspace=workspace, created_by=created_by, updated_by=updated_by,
-                    created_at=created_at, updated_at=updated_at, deleted_at=deleted_at, parent_type=parent_type)
+                    created_at=created_at, updated_at=updated_at, deleted_at=deleted_at, parent_type=parent_type,
+                    description=None)
 
 
 def get_default_task_type() -> TaskType:

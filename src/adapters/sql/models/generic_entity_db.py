@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, UUID, String, ForeignKey, DateTime
+from sqlalchemy import Column, UUID, String, ForeignKey, DateTime, Text
 from sqlalchemy.orm import declared_attr, relationship
 
 from src.entities.generic_entity import GenericEntity
@@ -13,11 +13,11 @@ class GenericEntityDB:
 
     @declared_attr
     def name(cls):
-        return Column(String(255), nullable=True)
+        return Column(Text, nullable=False)
 
     @declared_attr
     def workspace_id(cls):
-        return Column(UUID, ForeignKey("workspace.id"))
+        return Column(UUID, ForeignKey("workspace.id"), nullable=False)
 
     @declared_attr
     def created_at(cls):

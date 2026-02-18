@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, UUID, String, DateTime
+from sqlalchemy import Column, UUID, String, DateTime, Text
 
 from src.adapters.sql.models import Base
 from src.entities.user import User
@@ -9,11 +9,11 @@ from src.entities.user import User
 class UserDB(Base[User]):
     __tablename__ = "user"
     id = Column(UUID, primary_key=True)
-    name = Column(String(255), nullable=False)
-    login = Column(String(255), nullable=False, unique=True)
+    name = Column(Text, nullable=False)
+    login = Column(String(100), nullable=False, unique=True)
     email = Column(String(255), nullable=False, unique=True)
     photo = Column(String(255), nullable=True, unique=False)
-    password = Column(String(255), nullable=False)
+    password = Column(Text, nullable=False)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     deleted_at = Column(DateTime, nullable=True, default=None)
 

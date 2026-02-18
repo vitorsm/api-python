@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, UUID, String, DateTime, ForeignKey
+from sqlalchemy import Column, UUID, String, DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship
 
 from src.adapters.sql.models import Base
@@ -26,7 +26,7 @@ class WorkspaceUsersDB(Base):
 class WorkspaceDB(Base[Workspace]):
     __tablename__ = "workspace"
     id = Column(UUID, primary_key=True)
-    name = Column(String(255), nullable=False)
+    name = Column(Text, nullable=False)
 
     created_by = Column(UUID, ForeignKey("user.id"), nullable=False)
     updated_by = Column(UUID, ForeignKey("user.id"), nullable=False)
