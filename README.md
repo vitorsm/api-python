@@ -56,3 +56,7 @@ coverage html
 
 ## Deploy
 Use the script resources/scripts/generate-version.sh to publish the docker image in docker hub.
+
+## OpenID integrations
+
+To add a new OpenID integration add one more item to HTTPOpenIdRepository.CLIENTS

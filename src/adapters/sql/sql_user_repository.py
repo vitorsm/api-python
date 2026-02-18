@@ -4,7 +4,6 @@ from src.adapters.sql.db_instance import DBInstance
 from src.adapters.sql.models.user_db import UserDB
 from src.adapters.sql.sql_repository import SQLRepository
 from src.entities.exceptions.duplicate_entity_exception import DuplicateEntityException
-from src.entities.exceptions.invalid_entity_exception import InvalidEntityException
 from src.entities.user import User
 from src.services.ports.user_repository import UserRepository
 

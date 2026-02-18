@@ -6,6 +6,7 @@ from injector import Injector
 from sqlalchemy import Engine
 from sqlalchemy.orm import Session
 
+from src import config
 from src.adapters.sql.db_instance import DBInstance
 from src.application.api import register_controllers, DependencyInjector
 from tests.integration_tests.base_db_integration_test import BaseDBIntegrationTest
@@ -13,13 +14,12 @@ from tests.mocks import FIRST_DEFAULT_ID, SECOND_DEFAULT_ID
 
 SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
 TESTING = True
-ENCRYPT_SECRET_KEY = "tests"
 
 app = Flask(__name__)
 app.config['TESTING'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = ENCRYPT_SECRET_KEY
+app.config['SECRET_KEY'] = config.API_TOKEN_SECRET
 app.config['JWT_AUTH_URL_RULE'] = "/api/auth/authenticate"
 app.config['JWT_AUTH_HEADER_PREFIX'] = "Bearer"
 

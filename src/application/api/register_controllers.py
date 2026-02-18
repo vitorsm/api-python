@@ -5,6 +5,7 @@ from injector import Injector
 
 from src.application.api.controllers.authentication_controller import AuthenticationController
 from src.application.api.controllers.task_type_controller import TaskTypeController
+from src.application.api.controllers.user_state_controller import UserStateController
 from src.application.api.controllers.workspace_controller import WorkspaceController
 from src.application.api.errors import exception_handler
 from src.application.api.controllers.user_controller import UserController
@@ -16,6 +17,9 @@ def instantiate_controllers(app: Flask, app_injector: Injector):
 
     authentication_controller = AuthenticationController(app_injector)
     controllers.append(authentication_controller.controller)
+
+    user_state_controller = UserStateController(app_injector)
+    controllers.append(user_state_controller.controller)
 
     user_controller = UserController(app_injector)
     controllers.append(user_controller.controller)

@@ -1,8 +1,8 @@
 
 
-INSERT INTO "user" (id, name, login, password) VALUES
-('10000000-0000-0000-0000-000000000001', 'User 1', 'user1', '$2b$12$fCl5SumdCUWi4/xvO3r3Oe.lGUXxwDqZdM997XB6IBAuqEjO4aq.2'),
-('10000000-0000-0000-0000-000000000002', 'User 2', 'user2', '$2b$12$fCl5SumdCUWi4/xvO3r3Oe.lGUXxwDqZdM997XB6IBAuqEjO4aq.2');
+INSERT INTO "user" (id, name, login, password, email, photo) VALUES
+('10000000-0000-0000-0000-000000000001', 'User 1', 'user1', '$2b$12$fCl5SumdCUWi4/xvO3r3Oe.lGUXxwDqZdM997XB6IBAuqEjO4aq.2', 'user1@email.com', 'image1'),
+('10000000-0000-0000-0000-000000000002', 'User 2', 'user2', '$2b$12$fCl5SumdCUWi4/xvO3r3Oe.lGUXxwDqZdM997XB6IBAuqEjO4aq.2', 'user2@email.com', null);
 
 INSERT INTO workspace (id, name, created_at, updated_at, deleted_at, created_by, updated_by) VALUES
 ('10000000-0000-0000-0000-000000000001', 'Workspace 1', '2025-11-01 10:30:00', '2025-11-01 10:31:00', null, '10000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001'),

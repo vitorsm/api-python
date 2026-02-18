@@ -3,6 +3,8 @@ CREATE TABLE "user" (
     id UUID NOT NULL,
     name TEXT NOT NULL,
     login VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    photo VARCHAR(255) NULL,
     password TEXT NOT NULL,
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     deleted_at TIMESTAMP NULL DEFAULT NULL,

@@ -3,7 +3,6 @@ from datetime import datetime
 from typing import Optional
 from uuid import UUID
 
-from sqlalchemy.testing.pickleable import User
 
 from src.entities.exceptions.invalid_entity_exception import InvalidEntityException
 
@@ -14,6 +13,8 @@ class User:
     name: str
     login: str
     password: str
+    email: str
+    photo: Optional[str]
     updated_at: Optional[datetime] = None
     deleted_at: Optional[datetime] = None
 
